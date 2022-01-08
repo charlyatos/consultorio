@@ -3,7 +3,11 @@ package net.atos.crojo.service;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
+import org.springframework.scheduling.annotation.Async;
+
+import net.atos.crojo.config.ResourceNotFoundException;
 import net.atos.crojo.model.Base;
 import net.atos.crojo.repo.BaseRepository;
 
@@ -13,60 +17,48 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
     public BaseServiceImpl(BaseRepository<E, ID> baseRepository){
         this.baseRepository = baseRepository;
     }
-
+    @Async("asyncTask")
     @Override
-    public List<E> findAll() throws Exception {
-        try{
-            List<E> entities = baseRepository.findAll();
-            return entities;
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public  CompletableFuture<List<E>> findAll() {
+        
+    	System.out.println( Thread.currentThread().getName());
+            return CompletableFuture.completedFuture(baseRepository.findAll());
+       
     }
-
+    @Async("asyncTask")
     @Override
-    public E findById(ID id) throws Exception {
-        try{
-            Optional<E> entityOptional = baseRepository.findById(id);
-            return entityOptional.get();
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public CompletableFuture<E> findById(ID id) {
+            
+			return CompletableFuture.completedFuture(
+					baseRepository.findById(id).orElseThrow(() -> 
+					new ResourceNotFoundException("Entity", "Id", id))
+					);
+        
     }
-
+    @Async("asyncTask")
     @Override
-    public E save(E entity) throws Exception {
-        try{
-            entity =baseRepository.save(entity);
-            return entity;
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public CompletableFuture<E> save(E entity)  {
+        
+           
+            return CompletableFuture.completedFuture(baseRepository.save(entity));
+       
     }
-
+    @Async("asyncTask")
     @Override
-    public E update(ID id, E entity) throws Exception {
-        try{
-            Optional<E> entityOptional = baseRepository.findById(id);
-            E entityUpdate = entityOptional.get();
-            entityUpdate = baseRepository.save(entity);
-            return entityUpdate;
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+    public CompletableFuture<E> update(ID id, E entity)  {
+            E existentEntity = baseRepository.findById(id).orElseThrow(() -> 
+			new ResourceNotFoundException("Entity", "Id", id));
+            return CompletableFuture.completedFuture( baseRepository.save(entity) );
+       
     }
-
+    @Async("asyncTask")
     @Override
-    public boolean delete(ID id) throws Exception {
-        try{
+    public CompletableFuture<Boolean> delete(ID id) {
             if (baseRepository.existsById(id)){
                 baseRepository.deleteById(id);
-                return true;
+                return CompletableFuture.completedFuture(true);
             } else {
-                throw new Exception();
+            	return CompletableFuture.completedFuture(false);
             }
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
     }
 }

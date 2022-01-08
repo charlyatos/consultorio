@@ -3,6 +3,8 @@ package net.atos.crojo.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,26 +33,19 @@ public class User extends Base{
     private String password;
 	@Column(name="Status")
     private String status;
+	
 	@Column(name="CreationTime")
-    private String creationTime;
+	@Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date creationTime;
+	
 	@Column(name="ModificationTime")
-    private String modificationTime;
+	@Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date modificationTime;
+	
 	@Column(name="Usermodifier")
     private String userModifier;
 	@Column(name="UserCreator")
     private String userCreator;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }

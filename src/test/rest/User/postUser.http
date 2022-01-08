@@ -1,0 +1,14 @@
+POST http://localhost:8181/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample",
+    "lastName": "sample",
+    "SurName": "sample",
+    "email": "sample",
+    "role": "sample",
+    "username": "sample",
+    "password": "sample",
+    "status": "sample",
+    "creationTime": "2022-01-10"
+}
