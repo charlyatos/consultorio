@@ -50,7 +50,6 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
     @Async("asyncTask")
     @Override
     public CompletableFuture<E> update(ID id, E entity)  {
-    	
             E existentEntity = baseRepository.findById(id).orElseThrow(() -> 
 			new ResourceNotFoundException("Entity", "Id", id));
             

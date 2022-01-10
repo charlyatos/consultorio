@@ -34,13 +34,7 @@ public class User extends Base{
 	@Column(name="Status")
     private String status;
 	
-	@Column(name="CreationTime")
-	@Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date creationTime;
 	
-	@Column(name="ModificationTime")
-	@Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date modificationTime;
 	
 	@Column(name="Usermodifier")
     private String userModifier;

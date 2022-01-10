@@ -1,10 +1,8 @@
-PUT http://localhost:8181/api/users/12 HTTP/1.1
+PUT http://localhost:8181/api/users/15 HTTP/1.1
 content-type: application/json
 
 {
-    "name": "sample4",
-    "creationTime": "2022-01-11",
-    "lastName": "sample4",
-    "surName": "sample4",
-    "email": "sample4"
+    "name": "sample10",
+    "creationTime": "2022-01-12"
+    
 }
