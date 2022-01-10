@@ -2,9 +2,10 @@ package net.atos.crojo.service;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 import net.atos.crojo.config.ResourceNotFoundException;
@@ -13,7 +14,10 @@ import net.atos.crojo.repo.BaseRepository;
 
 public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> implements BaseService<E, ID> {
     protected BaseRepository<E, ID> baseRepository;
-
+    
+    @Autowired
+    ModelMapper mmap;
+    
     public BaseServiceImpl(BaseRepository<E, ID> baseRepository){
         this.baseRepository = baseRepository;
     }
@@ -46,9 +50,15 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
     @Async("asyncTask")
     @Override
     public CompletableFuture<E> update(ID id, E entity)  {
+    	
             E existentEntity = baseRepository.findById(id).orElseThrow(() -> 
 			new ResourceNotFoundException("Entity", "Id", id));
-            return CompletableFuture.completedFuture( baseRepository.save(entity) );
+            
+            entity.setId(existentEntity.getId());
+            
+            mmap.map(entity,existentEntity);
+            
+            return CompletableFuture.completedFuture( baseRepository.save(existentEntity) );
        
     }
     @Async("asyncTask")
