@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 import net.atos.crojo.config.ResourceNotFoundException;
+import net.atos.crojo.dto.BaseDTO;
 import net.atos.crojo.model.Base;
 import net.atos.crojo.repo.BaseRepository;
 
@@ -55,9 +56,12 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
             
             entity.setId(existentEntity.getId());
             
-            mmap.map(entity,existentEntity);
-            
-            return CompletableFuture.completedFuture( baseRepository.save(existentEntity) );
+            return CompletableFuture.completedFuture( baseRepository.save( 
+            		//mmap.map(existentEntity, dto.class)
+                    
+            		existentEntity
+            		) 
+            		);
        
     }
     @Async("asyncTask")
